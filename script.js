@@ -6,19 +6,23 @@ let resetX = `${(window.innerWidth / 2) - (steak.getBoundingClientRect().width /
     resetY = '15%'
 
 const setupJoseImages = (() => {
+    let previousPictureState = null
     //Constantly read isSteakInMouth to switch between pictureStates library
     function joseObservingSteak(pictureState, isSteakInMouth) {
         const pictureStates = {
-            'idle': ['Idle.png', '#808080'],
-            'isSeen': ['IsSeen.png', '#FFFF99'],
-            'isNear': ['IsNear.png', '#FFCC66'],
-            'isNearer': ['IsNearer.png', '#F4C86A'],
-            'isNearest': ['IsNearest.png', '#FF9933'],
+            'idle': ['assets/pictures/Idle.png', '#808080'],
+            'isSeen': ['assets/pictures/IsSeen.png', '#FFFF99'],
+            'isNear': ['assets/pictures/IsNear.png', '#FFCC66'],
+            'isNearer': ['assets/pictures/IsNearer.png', '#F4C86A'],
+            'isNearest': ['assets/pictures/IsNearest.png', '#FF9933'],
         }
         if (!isSteakInMouth) {
-            josePics.src = pictureStates[pictureState][0]
-            document.body.style.transition = 'background-color 0.5s ease'
-            document.body.style.backgroundColor = pictureStates[pictureState][1]
+            if(pictureState !== previousPictureState){
+                previousPictureState = pictureState
+                josePics.src = pictureStates[pictureState][0]
+                document.body.style.transition = 'background-color 0.5s ease'
+                document.body.style.backgroundColor = pictureStates[pictureState][1]
+            }
         }
         else {
            const isMouthClosed = false;
@@ -45,7 +49,7 @@ const setupJoseImages = (() => {
         let eatingInterval;
         eatingInterval = setInterval(() => {
             isMouthClosed = !isMouthClosed;
-            josePics.src = isMouthClosed ? 'Eat2.png' : 'Eat1.png'
+            josePics.src = isMouthClosed ? 'assets/pictures/Eat2.png' : 'assets/pictures/Eat1.png'
             document.body.style.backgroundColor = '#FF3300'
 
             if (--timeLeft === 0) {
