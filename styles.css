@@ -67,12 +67,27 @@ main {
 
 .jose{
     width: 350px;
-    display: flex;
+    height: 533.83px;
     position: fixed;
+    overflow: hidden;
     top: 50%;
     right: 0;
     z-index: 0;
 }
+
+.active {
+    visibility: visible;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.scale {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
 
 #mouth{
     width: 80px;

@@ -1,5 +1,6 @@
 const steak = document.getElementById('steak')
-const josePics = document.getElementById('JoseClip')
+const josePics = document.getElementById('joseContainer')
+console.log(josePics.getBoundingClientRect().width)
 const joseMouth = document.getElementById('mouth')
 let newX = 0, newY = 0, startX = 0, startY = 0
 let resetX = `${(window.innerWidth / 2) - (steak.getBoundingClientRect().width / 2)}px`,
@@ -9,28 +10,47 @@ const setupJoseImages = (() => {
     let previousPictureState = null
     //Constantly read isSteakInMouth to switch between pictureStates library
     function joseObservingSteak(pictureState, isSteakInMouth) {
+
+        const observingImages = document.querySelectorAll("#joseContainer .observe")
+        console.log(observingImages[0])
         const pictureStates = {
-            'idle': ['assets/pictures/Idle.png', '#808080'],
-            'isSeen': ['assets/pictures/IsSeen.png', '#FFFF99'],
-            'isNear': ['assets/pictures/IsNear.png', '#FFCC66'],
-            'isNearer': ['assets/pictures/IsNearer.png', '#F4C86A'],
-            'isNearest': ['assets/pictures/IsNearest.png', '#FF9933'],
+            'idle': [0, '#808080'],
+            'isSeen': [1, '#FFFF99'],
+            'isNear': [2, '#FFCC66'],
+            'isNearer': [3, '#F4C86A'],
+            'isNearest': [4, '#FF9933'],
         }
-        if (!isSteakInMouth) {
-            if(pictureState !== previousPictureState){
-                previousPictureState = pictureState
-                josePics.src = pictureStates[pictureState][0]
+        if (pictureState !== previousPictureState) {
+            previousPictureState = pictureState
+            if (!isSteakInMouth) {
+                observingImages[pictureStates[pictureState][0]].classList.remove('hidden')
+                observingImages[pictureStates[pictureState][0]].classList.remove('scale')
+                observingImages[pictureStates[pictureState][0]].classList.add('active')
+                for (let i = 0; i < observingImages.length; i++) {
+                    if (i !== pictureStates[pictureState][0]) {
+                        observingImages[i].classList.remove('scale')
+                        observingImages[i].classList.remove('active')
+                        observingImages[i].classList.add('hidden')
+                    }
+                }
                 document.body.style.transition = 'background-color 0.5s ease'
                 document.body.style.backgroundColor = pictureStates[pictureState][1]
             }
-        }
-        else {
-           const isMouthClosed = false;
-            joseEatingSteak(isMouthClosed)
+            else {
+                const isMouthClosed = false;
+                joseEatingSteak(isMouthClosed)
+                for (let i = 0; i < observingImages.length; i++) {
+                    observingImages[i].classList.add('scale')
+                    observingImages[i].classList.remove('active')
+                    observingImages[i].classList.remove('hidden')
+                }
+            }
         }
     }
 
     function joseEatingSteak(_isMouthClosed) {
+        const eatingImages = document.querySelectorAll("#joseContainer .eating")
+        console.log(eatingImages)
         let isMouthClosed = _isMouthClosed
         steak.removeEventListener('mousedown', setupMouseEvents.mouseDown)
         steak.removeEventListener('touchstart', setupMobileEvents.mobileDown)
@@ -49,11 +69,19 @@ const setupJoseImages = (() => {
         let eatingInterval;
         eatingInterval = setInterval(() => {
             isMouthClosed = !isMouthClosed;
-            josePics.src = isMouthClosed ? 'assets/pictures/Eat2.png' : 'assets/pictures/Eat1.png'
+            console.log(Number(isMouthClosed))
+            eatingImages[Number(isMouthClosed)].classList.remove('hidden')
+            eatingImages[Number(isMouthClosed)].classList.add('active')
+            eatingImages[Number(!isMouthClosed)].classList.remove('active')
+            eatingImages[Number(!isMouthClosed)].classList.add('hidden')
             document.body.style.backgroundColor = '#FF3300'
 
             if (--timeLeft === 0) {
                 clearInterval(eatingInterval)
+                eatingImages[Number(isMouthClosed)].classList.remove('active')
+                eatingImages[Number(isMouthClosed)].classList.add('hidden')
+                eatingImages[Number(!isMouthClosed)].classList.remove('active')
+                eatingImages[Number(!isMouthClosed)].classList.add('hidden')
                 eatingInterval = null
                 bringBackSteak()
                 setupAudio.rampDownOscillators()
@@ -264,7 +292,7 @@ const setupMouseEvents = (() => {
     }
 })()
 
-const setupMobileEvents = (()=>{
+const setupMobileEvents = (() => {
     function mobileMove(event) {
         //Record New X and Y positions
         event.preventDefault();
