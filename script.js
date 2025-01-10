@@ -10,7 +10,6 @@ const setupJoseImages = (() => {
     let previousPictureState = null
     //Constantly read isSteakInMouth to switch between pictureStates library
     function joseObservingSteak(pictureState, isSteakInMouth) {
-
         const observingImages = document.querySelectorAll("#joseContainer .observe")
         console.log(observingImages[0])
         const pictureStates = {
@@ -39,11 +38,12 @@ const setupJoseImages = (() => {
             else {
                 const isMouthClosed = false;
                 joseEatingSteak(isMouthClosed)
-                for (let i = 0; i < observingImages.length; i++) {
-                    observingImages[i].classList.add('scale')
-                    observingImages[i].classList.remove('active')
-                    observingImages[i].classList.remove('hidden')
-                }
+                setTimeout(() => {
+                    for (let i = 0; i < observingImages.length; i++) {
+                        observingImages[i].classList.remove('active')
+                        observingImages[i].classList.add('hidden')
+                    }
+                }, 100);
             }
         }
     }

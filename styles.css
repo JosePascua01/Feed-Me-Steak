@@ -83,12 +83,6 @@ main {
     visibility: hidden;
 }
 
-.scale {
-    opacity: 0;
-    transition: opacity 0.5s;
-}
-
-
 #mouth{
     width: 80px;
     height: 80px;
